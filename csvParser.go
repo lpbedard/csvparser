@@ -7,12 +7,12 @@ import (
 	"strconv"
 )
 
-//Parser parse a csv file and returns an array of the type specified
+//Parser parse a csv file and returns an array of pointers of the type specified
 type Parser interface {
 	Parse(outType interface{})
 }
 
-//CsvParser parses a csv file and returns an array of the type specified
+//CsvParser parses a csv file and returns an array of pointers the type specified
 type CsvParser struct {
 	CsvFile      string
 	CsvSeparator rune
