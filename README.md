@@ -21,7 +21,7 @@ Define your struct:
       Field2 string
     }
 
-If you don't add 'csv' tags close to each struct's field, the lib will will set the first field using the first column of csv's row, and so on.
+If you don't add 'csv' tags close to each struct's field, the lib will set the first field using the first column of csv's row, and so on.
 
 You can always define 'csv' tags (for all or some of the struct's fields) that will tell the lib which column to use:
 
