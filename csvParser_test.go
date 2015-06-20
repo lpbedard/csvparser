@@ -5,33 +5,6 @@ import (
 	"testing"
 )
 
-type ExampleContact1 struct {
-	FirstName   string `csv:"0"`
-	LastName    string `csv:"1"`
-	Title       string `csv:"2"`
-	Email       string `csv:"3"`
-	Birthdate   string `csv:"4"`
-	Description string `csv:"5"`
-}
-
-type ExampleContact2 struct {
-	FirstName   string
-	LastName    string `csv:"1"`
-	Title       string `csv:"2"`
-	Email       string
-	Birthdate   string `csv:"4"`
-	Description string `csv:"5"`
-}
-
-type ExampleContact3 struct {
-	FirstName   string
-	LastName    string
-	Title       string
-	Email       string
-	Birthdate   string
-	Description string
-}
-
 var contacts1 []interface{}
 var contacts2 []interface{}
 var contacts3 []interface{}
@@ -42,8 +15,6 @@ var parseErr3 error
 var csvParser CsvParser
 
 func TestMain(m *testing.M) {
-	//setup
-
 	csvParser = CsvParser{
 		CsvFile:      "example.csv",
 		CsvSeparator: ',',
@@ -82,75 +53,15 @@ func TestAllContactsHaveBeenParsed(t *testing.T) {
 }
 
 func TestContactHaveBeenParsed1(t *testing.T) {
-
-	var c = contacts1[0].(*ExampleContact1)
-
-	if c.FirstName != "Tom" {
-		t.Errorf("Parsed contact firstname is wrong: Actual %v, Expected %v", c.FirstName, "Tom")
-	}
-	if c.LastName != "Jones" {
-		t.Errorf("Parsed contact lastname is wrong: Actual %v, Expected %v", c.LastName, "Jones")
-	}
-	if c.Title != "Senior Director" {
-		t.Errorf("Parsed contact title is wrong: Actual %v, Expected %v", c.Title, "Senior Director")
-	}
-	if c.Email != "buyer@mymail.com" {
-		t.Errorf("Parsed contact email is wrong: Actual %v, Expected %v", c.Email, "buyer@mymail.com")
-	}
-	if c.Birthdate != "1999-06-07" {
-		t.Errorf("Parsed contact birthdate is wrong: Actual %v, Expected %v", c.Birthdate, "1999-06-07")
-	}
-	if c.Description != "Self-described as \"the top\" branding guru on the West Coast" {
-		t.Errorf("Parsed contact description is wrong: Actual %v, Expected %v", c.Description, "Self-described as \"the top\" branding guru on the West Coast")
-	}
+	testSingleContact(t, contacts1[0].(*ExampleContact1))
 }
 
 func TestContactHaveBeenParsed2(t *testing.T) {
-
-	var c = contacts2[0].(*ExampleContact2)
-
-	if c.FirstName != "Tom" {
-		t.Errorf("Parsed contact firstname is wrong: Actual %v, Expected %v", c.FirstName, "Tom")
-	}
-	if c.LastName != "Jones" {
-		t.Errorf("Parsed contact lastname is wrong: Actual %v, Expected %v", c.LastName, "Jones")
-	}
-	if c.Title != "Senior Director" {
-		t.Errorf("Parsed contact title is wrong: Actual %v, Expected %v", c.Title, "Senior Director")
-	}
-	if c.Email != "buyer@mymail.com" {
-		t.Errorf("Parsed contact email is wrong: Actual %v, Expected %v", c.Email, "buyer@mymail.com")
-	}
-	if c.Birthdate != "1999-06-07" {
-		t.Errorf("Parsed contact birthdate is wrong: Actual %v, Expected %v", c.Birthdate, "1999-06-07")
-	}
-	if c.Description != "Self-described as \"the top\" branding guru on the West Coast" {
-		t.Errorf("Parsed contact description is wrong: Actual %v, Expected %v", c.Description, "Self-described as \"the top\" branding guru on the West Coast")
-	}
+	testSingleContact(t, contacts2[0].(*ExampleContact2))
 }
 
 func TestContactHaveBeenParsed3(t *testing.T) {
-
-	var c = contacts3[0].(*ExampleContact3)
-
-	if c.FirstName != "Tom" {
-		t.Errorf("Parsed contact firstname is wrong: Actual %v, Expected %v", c.FirstName, "Tom")
-	}
-	if c.LastName != "Jones" {
-		t.Errorf("Parsed contact lastname is wrong: Actual %v, Expected %v", c.LastName, "Jones")
-	}
-	if c.Title != "Senior Director" {
-		t.Errorf("Parsed contact title is wrong: Actual %v, Expected %v", c.Title, "Senior Director")
-	}
-	if c.Email != "buyer@mymail.com" {
-		t.Errorf("Parsed contact email is wrong: Actual %v, Expected %v", c.Email, "buyer@mymail.com")
-	}
-	if c.Birthdate != "1999-06-07" {
-		t.Errorf("Parsed contact birthdate is wrong: Actual %v, Expected %v", c.Birthdate, "1999-06-07")
-	}
-	if c.Description != "Self-described as \"the top\" branding guru on the West Coast" {
-		t.Errorf("Parsed contact description is wrong: Actual %v, Expected %v", c.Description, "Self-described as \"the top\" branding guru on the West Coast")
-	}
+	testSingleContact(t, contacts3[0].(*ExampleContact3))
 }
 
 func TestParsingANotExistingCsvFile(t *testing.T) {
@@ -176,5 +87,41 @@ func TestParsingAnInvalidCsvFile(t *testing.T) {
 
 	if err == nil {
 		t.Error("TestParsingAnInvalidCsvFile should return an error")
+	}
+}
+
+func testSingleContact(t *testing.T, c ContactGetter) {
+	if c.GetFirstName() != "Tom" {
+		t.Errorf("Parsed contact firstname is wrong: Actual %v, Expected %v", c.GetFirstName(), "Tom")
+	}
+	if c.GetLastName() != "Jones" {
+		t.Errorf("Parsed contact lastname is wrong: Actual %v, Expected %v", c.GetLastName(), "Jones")
+	}
+	if c.GetWorking() != true {
+		t.Errorf("Parsed contact working is wrong: Actual %v, Expected %v", c.GetWorking(), true)
+	}
+	if c.GetAge() != 56 {
+		t.Errorf("Parsed contact working is wrong: Actual %v, Expected %v", c.GetAge(), 56)
+	}
+	if c.GetSalary32() != 42000.32 {
+		t.Errorf("Parsed contact salary is wrong: Actual %v, Expected %v", c.GetSalary32(), 42000.32)
+	}
+	if c.GetSalary64() != 42000.64 {
+		t.Errorf("Parsed contact salary is wrong: Actual %v, Expected %v", c.GetSalary64(), 42000.64)
+	}
+	if c.GetVacationDays() != 10 {
+		t.Errorf("Parsed contact vacation days is wrong: Actual %v, Expected %v", c.GetVacationDays(), 10)
+	}
+	if c.GetTitle() != "Senior Director" {
+		t.Errorf("Parsed contact title is wrong: Actual %v, Expected %v", c.GetTitle(), "Senior Director")
+	}
+	if c.GetEmail() != "buyer@mymail.com" {
+		t.Errorf("Parsed contact email is wrong: Actual %v, Expected %v", c.GetEmail(), "buyer@mymail.com")
+	}
+	if c.GetBirthdate() != "1999-06-07" {
+		t.Errorf("Parsed contact birthdate is wrong: Actual %v, Expected %v", c.GetBirthdate(), "1999-06-07")
+	}
+	if c.GetDescription() != "Self-described as \"the top\" branding guru on the West Coast" {
+		t.Errorf("Parsed contact description is wrong: Actual %v, Expected %v", c.GetDescription(), "Self-described as \"the top\" branding guru on the West Coast")
 	}
 }
