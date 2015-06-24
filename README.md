@@ -1,4 +1,4 @@
-# CSV Parser
+# CSV Parser [![Build Status](https://travis-ci.org/empatica/csvparser.svg?branch=master)](https://travis-ci.org/empatica/csvparser)
 
 Simple library that parse a CSV file and returns an array of pointers to the given type.
 
