@@ -64,6 +64,70 @@ func TestContactHaveBeenParsed3(t *testing.T) {
 	testSingleContact(t, contacts3[0].(*ExampleContact3))
 }
 
+func TestContactWithInvalidBoolField(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactInvalidBoolean{})
+
+	if err == nil {
+		t.Error("TestContactWithInvalidBoolField should return an error")
+	}
+}
+
+func TestContactWithInvalidUintField(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactInvalidUint{})
+
+	if err == nil {
+		t.Error("TestContactWithInvalidUintField should return an error")
+	}
+}
+
+func TestContactWithInvalidIntField(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactInvalidInt{})
+
+	if err == nil {
+		t.Error("TestContactWithInvalidIntField should return an error")
+	}
+}
+
+func TestContactWithInvalidFloat32Field(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactInvalidFloat32{})
+
+	if err == nil {
+		t.Error("TestContactWithInvalidFloat32Field should return an error")
+	}
+}
+
+func TestContactWithInvalidFloat64Field(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactInvalidFloat64{})
+
+	if err == nil {
+		t.Error("TestContactWithInvalidFloat64Field should return an error")
+	}
+}
+
+func TestContactWithCsvColumnTooHigh(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactWithCsvColumnFieldTooHigh{})
+
+	if err == nil {
+		t.Error("TestContactWithCsvColumnTooHigh should return an error")
+	}
+}
+
+func TestContactWithCsvTagLessThanZero(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactWithCsvTagLessThanZero{})
+
+	if err == nil {
+		t.Error("ExampleContactWithCsvTagLessThanZero should return an error")
+	}
+}
+
+func TestContactWithCsvTagNotAnInteger(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactWithCsvTagNotAnInteger{})
+
+	if err == nil {
+		t.Error("ExampleContactWithCsvTagNotAnInteger should return an error")
+	}
+}
+
 func TestParsingANotExistingCsvFile(t *testing.T) {
 	var csvNotExistingParser = CsvParser{
 		CsvFile:      "example_not_existing.csv",

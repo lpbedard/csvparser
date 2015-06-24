@@ -2,7 +2,7 @@ package parser
 
 import (
 	"encoding/csv"
-	"log"
+	"fmt"
 	"os"
 	"reflect"
 	"strconv"
@@ -36,13 +36,25 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 		// set all the struct fields
 		for i := 0; i < outType.NumField(); i++ {
 			var currentField = outType.Field(i)
-			var csvColumn, csvTagErr = strconv.Atoi(currentField.Tag.Get("csv"))
+
+			var csvTag = currentField.Tag.Get("csv")
+			var csvColumn, csvTagErr = strconv.Atoi(csvTag)
 
 			if csvTagErr != nil {
-				csvColumn = i
+				if csvTag == "" {
+					csvColumn = i
+				} else {
+					return nil, csvTagErr
+				}
 			}
 
-			//log.Print(currentField.Type)
+			if csvColumn < 0 {
+				return nil, fmt.Errorf("csv tag in struct field %v is less than zero", currentField.Name)
+			}
+
+			if len(lines[l]) < csvColumn {
+				return nil, fmt.Errorf("Trying to access csv column %v for field %v, but csv has only %v column", csvColumn, currentField.Name, len(lines[l]))
+			}
 
 			var csvElement = lines[l][csvColumn]
 			var settableField = reflect.ValueOf(x).Elem().FieldByName(currentField.Name)
@@ -52,35 +64,35 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 			case "bool":
 				var parsedBool, err = strconv.ParseBool(csvElement)
 				if err != nil {
-					log.Fatalf("Cannot convert %v to bool", csvElement)
+					return nil, err
 				}
 				settableField.SetBool(parsedBool)
 
 			case "uint", "uint8", "uint16", "uint32", "uint64":
 				var parsedUint, err = strconv.ParseUint(csvElement, 10, 64)
 				if err != nil {
-					log.Fatalf("Cannot convert %v to uint", csvElement)
+					return nil, err
 				}
 				settableField.SetUint(uint64(parsedUint))
 
 			case "int", "int32", "int64":
 				var parsedInt, err = strconv.Atoi(csvElement)
 				if err != nil {
-					log.Fatalf("Cannot convert %v to int", csvElement)
+					return nil, err
 				}
 				settableField.SetInt(int64(parsedInt))
 
 			case "float32":
 				var parsedFloat, err = strconv.ParseFloat(csvElement, 32)
 				if err != nil {
-					log.Fatalf("Cannot convert %v to float32", csvElement)
+					return nil, err
 				}
 				settableField.SetFloat(parsedFloat)
 
 			case "float64":
 				var parsedFloat, err = strconv.ParseFloat(csvElement, 64)
 				if err != nil {
-					log.Fatalf("Cannot convert %v to float64", csvElement)
+					return nil, err
 				}
 				settableField.SetFloat(parsedFloat)
 

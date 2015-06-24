@@ -60,6 +60,96 @@ type ExampleContact3 struct {
 	Description  string
 }
 
+//ExampleContactInvalidBoolean is made for testing bool wrong field
+type ExampleContactInvalidBoolean struct {
+	FirstName    string
+	LastName     bool //this is not a bool!
+	Working      bool
+	Age          int
+	Salary32     float32
+	Salary64     float64
+	VacationDays uint
+	Title        string
+	Email        string
+	Birthdate    string
+	Description  string
+}
+
+//ExampleContactInvalidUint is made for testing uint wrong field
+type ExampleContactInvalidUint struct {
+	FirstName    string
+	LastName     uint //this is not an uint!
+	Working      bool
+	Age          int
+	Salary32     float32
+	Salary64     float64
+	VacationDays uint
+	Title        string
+	Email        string
+	Birthdate    string
+	Description  string
+}
+
+//ExampleContactInvalidInt is made for testing uint wrong field
+type ExampleContactInvalidInt struct {
+	FirstName    string
+	LastName     int //this is not an int!
+	Working      bool
+	Age          int
+	Salary32     float32
+	Salary64     float64
+	VacationDays uint
+	Title        string
+	Email        string
+	Birthdate    string
+	Description  string
+}
+
+//ExampleContactInvalidFloat32 is made for testing uint wrong field
+type ExampleContactInvalidFloat32 struct {
+	FirstName    string
+	LastName     float32 //this is not an int!
+	Working      bool
+	Age          int
+	Salary32     float32
+	Salary64     float64
+	VacationDays uint
+	Title        string
+	Email        string
+	Birthdate    string
+	Description  string
+}
+
+//ExampleContactInvalidFloat64 is made for testing uint wrong field
+type ExampleContactInvalidFloat64 struct {
+	FirstName    string
+	LastName     float64 //this is not an int!
+	Working      bool
+	Age          int
+	Salary32     float32
+	Salary64     float64
+	VacationDays uint
+	Title        string
+	Email        string
+	Birthdate    string
+	Description  string
+}
+
+//ExampleContactWithCsvColumnFieldTooHigh has a csv column tag that exceed the number of csv columns in a row
+type ExampleContactWithCsvColumnFieldTooHigh struct {
+	LastName string `csv:"1000"`
+}
+
+//ExampleContactWithCsvTagLessThanZero has a csv column tag that is negative
+type ExampleContactWithCsvTagLessThanZero struct {
+	LastName string `csv:"-2"`
+}
+
+//ExampleContactWithCsvTagNotAnInteger has a csv column tag that is not an integer
+type ExampleContactWithCsvTagNotAnInteger struct {
+	LastName string `csv:"notAnInteger"`
+}
+
 func (c1 ExampleContact1) GetFirstName() string   { return c1.FirstName }
 func (c1 ExampleContact1) GetLastName() string    { return c1.LastName }
 func (c1 ExampleContact1) GetWorking() bool       { return c1.Working }
@@ -84,10 +174,7 @@ func (c2 ExampleContact2) GetEmail() string       { return c2.Email }
 func (c2 ExampleContact2) GetBirthdate() string   { return c2.Birthdate }
 func (c2 ExampleContact2) GetDescription() string { return c2.Description }
 
-//GetFirstName get first name
-func (c3 ExampleContact3) GetFirstName() string { return c3.FirstName }
-
-//GetLastName get last name
+func (c3 ExampleContact3) GetFirstName() string   { return c3.FirstName }
 func (c3 ExampleContact3) GetLastName() string    { return c3.LastName }
 func (c3 ExampleContact3) GetWorking() bool       { return c3.Working }
 func (c3 ExampleContact3) GetAge() int            { return c3.Age }
