@@ -43,7 +43,7 @@ You can always define 'csv' tags (for all or some of the struct's fields) that w
 
 Parse the file:
 
-    var csvParser = csvparser.CsvParser{
+    var csvParser = parser.CsvParser{
         CsvFile:      "path_to_your_file.csv",
         CsvSeparator: ',',
     }
