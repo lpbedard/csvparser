@@ -15,8 +15,9 @@ type Parser interface {
 
 //CsvParser parses a csv file and returns an array of pointers the type specified
 type CsvParser struct {
-	CsvFile      string
-	CsvSeparator rune
+	CsvFile       string
+	CsvSeparator  rune
+	SkipFirstLine bool
 }
 
 //Parse creates the array of the given type from the csv file
@@ -29,7 +30,12 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 	fn := reflect.ValueOf(f)
 	outType := fn.Type()
 
-	for l := 0; l < len(lines); l++ {
+	var startIndex = 0
+	if parser.SkipFirstLine {
+		startIndex = 1
+	}
+
+	for l := startIndex; l < len(lines); l++ {
 		//create the new item
 		var x = reflect.New(outType).Interface()
 

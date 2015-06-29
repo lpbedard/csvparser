@@ -16,7 +16,7 @@ var csvParser CsvParser
 
 func TestMain(m *testing.M) {
 	csvParser = CsvParser{
-		CsvFile:      "example.csv",
+		CsvFile:      "example_files/example.csv",
 		CsvSeparator: ',',
 	}
 
@@ -143,7 +143,7 @@ func TestParsingANotExistingCsvFile(t *testing.T) {
 
 func TestParsingAnInvalidCsvFile(t *testing.T) {
 	var csvNotExistingParser = CsvParser{
-		CsvFile:      "example_invalid.csv",
+		CsvFile:      "example_files/example_invalid.csv",
 		CsvSeparator: ',',
 	}
 
@@ -152,6 +152,26 @@ func TestParsingAnInvalidCsvFile(t *testing.T) {
 	if err == nil {
 		t.Error("TestParsingAnInvalidCsvFile should return an error")
 	}
+}
+
+func TestParsingAFileWithFirstLineWithHeaders(t *testing.T) {
+	var parser = CsvParser{
+		CsvFile:       "example_files/example_first_line.csv",
+		CsvSeparator:  ',',
+		SkipFirstLine: true,
+	}
+
+	parsed, err := parser.Parse(ExampleContact1{})
+
+	if err != nil {
+		t.Fatalf("TestParsingAFileWithFirstLineWithHeaders: unexpected error reading file: %v", err)
+	}
+
+	if len(parsed) != 1 {
+		t.Fatalf("TestParsingAFileWithFirstLineWithHeaders: unexpected number of parsed lines. Actual %v, Expected %v", len(parsed), 1)
+
+	}
+
 }
 
 func testSingleContact(t *testing.T, c ContactGetter) {
