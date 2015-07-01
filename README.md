@@ -46,6 +46,7 @@ Parse the file:
     var csvParser = parser.CsvParser{
         CsvFile:      "path_to_your_file.csv",
         CsvSeparator: ',',
+        SkipFirstLine : true, //default:false
     }
 
     var parsedItems, err = csvParser.Parse(YourStruct{})
