@@ -52,5 +52,5 @@ Parse the file:
     var parsedItems, err = csvParser.Parse(YourStruct{})
 
     for i:=0;i<len(parsedItems);i++{
-      log.Print(parsedItems[0].(*YourStruct))
+      log.Print(parsedItems[i].(*YourStruct))
     }
