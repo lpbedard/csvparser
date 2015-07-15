@@ -169,9 +169,32 @@ func TestParsingAFileWithFirstLineWithHeaders(t *testing.T) {
 
 	if len(parsed) != 1 {
 		t.Fatalf("TestParsingAFileWithFirstLineWithHeaders: unexpected number of parsed lines. Actual %v, Expected %v", len(parsed), 1)
+	}
+}
 
+func TestParsingAFileWithEmptyValues(t *testing.T) {
+	var parser = CsvParser{
+		CsvFile:         "example_files/example_empty_values.csv",
+		CsvSeparator:    ',',
+		SkipFirstLine:   true,
+		SkipEmptyValues: true,
 	}
 
+	parsed, err := parser.Parse(ExampleContact1{})
+
+	if err != nil {
+		t.Fatalf("TestParsingAFileWithEmptyValues: unexpected error reading file: %v", err)
+	}
+
+	if len(parsed) != 1 {
+		t.Fatalf("TestParsingAFileWithEmptyValues: unexpected number of parsed lines. Actual %v, Expected %v", len(parsed), 1)
+	}
+
+	var contact = parsed[0].(*ExampleContact1)
+
+	if contact.LastName != "" {
+		t.Fatalf("TestParsingAFileWithEmptyValues: wrong lastname. Actual %v, Expected %v", contact.LastName, "")
+	}
 }
 
 func testSingleContact(t *testing.T, c ContactGetter) {

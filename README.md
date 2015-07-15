@@ -47,6 +47,7 @@ Parse the file:
         CsvFile:      "path_to_your_file.csv",
         CsvSeparator: ',',
         SkipFirstLine : true, //default:false
+        SkipEmptyValues : true, //default:false. It will skip empty values and won't try to parse them
     }
 
     var parsedItems, err = csvParser.Parse(YourStruct{})

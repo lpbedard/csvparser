@@ -15,9 +15,10 @@ type Parser interface {
 
 //CsvParser parses a csv file and returns an array of pointers the type specified
 type CsvParser struct {
-	CsvFile       string
-	CsvSeparator  rune
-	SkipFirstLine bool
+	CsvFile         string
+	CsvSeparator    rune
+	SkipFirstLine   bool
+	SkipEmptyValues bool
 }
 
 //Parse creates the array of the given type from the csv file
@@ -64,6 +65,10 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 
 			var csvElement = lines[l][csvColumn]
 			var settableField = reflect.ValueOf(x).Elem().FieldByName(currentField.Name)
+
+			if csvElement == "" && parser.SkipEmptyValues {
+				continue
+			}
 
 			switch currentField.Type.Name() {
 
