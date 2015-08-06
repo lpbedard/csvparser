@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 //Parser parse a csv file and returns an array of pointers of the type specified
@@ -108,9 +109,16 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 				settableField.SetFloat(parsedFloat)
 
 			case "string":
-				settableField.SetString(csvElement)
-			}
 
+				settableField.SetString(csvElement)
+
+			case "Time":
+				var date, err = time.Parse(currentField.Tag.Get("csvDate"), csvElement)
+				if err != nil {
+					return nil, err
+				}
+				settableField.Set(reflect.ValueOf(date))
+			}
 		}
 		//append the result
 		result = append(result, x)

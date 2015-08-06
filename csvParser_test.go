@@ -128,6 +128,14 @@ func TestContactWithCsvTagNotAnInteger(t *testing.T) {
 	}
 }
 
+func TestParsingWrongDateFormat(t *testing.T) {
+	_, err := csvParser.Parse(ExampleContactInvalidTime{})
+
+	if err == nil {
+		t.Error("TestParsingWrongDateFormat should return an error")
+	}
+}
+
 func TestParsingANotExistingCsvFile(t *testing.T) {
 	var csvNotExistingParser = CsvParser{
 		CsvFile:      "example_not_existing.csv",
@@ -225,8 +233,8 @@ func testSingleContact(t *testing.T, c ContactGetter) {
 	if c.GetEmail() != "buyer@mymail.com" {
 		t.Errorf("Parsed contact email is wrong: Actual %v, Expected %v", c.GetEmail(), "buyer@mymail.com")
 	}
-	if c.GetBirthdate() != "1999-06-07" {
-		t.Errorf("Parsed contact birthdate is wrong: Actual %v, Expected %v", c.GetBirthdate(), "1999-06-07")
+	if c.GetBirthdate().Year() != 1999 {
+		t.Errorf("Parsed contact birthdate year is wrong: Actual %v, Expected %v", c.GetBirthdate().Year(), 1999)
 	}
 	if c.GetDescription() != "Self-described as \"the top\" branding guru on the West Coast" {
 		t.Errorf("Parsed contact description is wrong: Actual %v, Expected %v", c.GetDescription(), "Self-described as \"the top\" branding guru on the West Coast")
