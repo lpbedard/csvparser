@@ -24,8 +24,11 @@ type CsvParser struct {
 
 //Parse creates the array of the given type from the csv file
 func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
-
 	var lines, err = getCsvLines(parser.CsvFile, parser.CsvSeparator)
+
+	if err != nil {
+		return nil, err
+	}
 
 	var result = make([]interface{}, 0, 0)
 
@@ -60,7 +63,7 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 				return nil, fmt.Errorf("csv tag in struct field %v is less than zero", currentField.Name)
 			}
 
-			if len(lines[l]) < csvColumn {
+			if len(lines[l]) <= csvColumn {
 				return nil, fmt.Errorf("Trying to access csv column %v for field %v, but csv has only %v column", csvColumn, currentField.Name, len(lines[l]))
 			}
 
@@ -109,7 +112,6 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 				settableField.SetFloat(parsedFloat)
 
 			case "string":
-
 				settableField.SetString(csvElement)
 
 			case "Time":
@@ -136,10 +138,5 @@ func getCsvLines(csvFile string, separator rune) ([][]string, error) {
 	var csvReader = csv.NewReader(file)
 	csvReader.Comma = separator
 
-	lines, err := csvReader.ReadAll()
-	if err != nil {
-		return nil, err
-	}
-
-	return lines, err
+	return csvReader.ReadAll()
 }
