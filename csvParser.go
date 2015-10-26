@@ -135,6 +135,8 @@ func getCsvLines(csvFile string, separator rune) ([][]string, error) {
 		return nil, err
 	}
 
+	defer file.Close()
+
 	var csvReader = csv.NewReader(file)
 	csvReader.Comma = separator
 
