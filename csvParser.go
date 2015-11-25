@@ -25,14 +25,13 @@ type CsvParser struct {
 //Parse creates the array of the given type from the csv file
 func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 
-	file, err := os.Open(parser.CsvFile)
+	csvFile, err := os.Open(parser.CsvFile)
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
-	var csvReader = csv.NewReader(file)
+	defer csvFile.Close()
+	var csvReader = csv.NewReader(csvFile)
 	csvReader.Comma = parser.CsvSeparator
-	///
 
 	if err != nil {
 		return nil, err
@@ -44,7 +43,7 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 
 	for {
 
-		rawLine, err := csvReader.Read()
+		rawCSVLine, err := csvReader.Read()
 		if err != nil {
 			if fmt.Sprint(err) == "EOF" {
 				break
@@ -79,11 +78,11 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 				return nil, fmt.Errorf("csv tag in struct field %v is less than zero", currentField.Name)
 			}
 
-			if csvColumnIndex >= len(rawLine) {
-				return nil, fmt.Errorf("Trying to access csv column %v for field %v, but csv has only %v column(s)", csvColumnIndex, currentField.Name, len(rawLine))
+			if csvColumnIndex >= len(rawCSVLine) {
+				return nil, fmt.Errorf("Trying to access csv column %v for field %v, but csv has only %v column(s)", csvColumnIndex, currentField.Name, len(rawCSVLine))
 			}
 
-			var csvElement = rawLine[csvColumnIndex]
+			var csvElement = rawCSVLine[csvColumnIndex]
 			var settableField = reflect.ValueOf(newItem).Elem().FieldByName(currentField.Name)
 
 			if csvElement == "" && parser.SkipEmptyValues {
