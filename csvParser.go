@@ -30,9 +30,9 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 		return nil, err
 	}
 	defer csvFile.Close()
+
 	var csvReader = csv.NewReader(csvFile)
 	csvReader.Comma = parser.CsvSeparator
-
 	if err != nil {
 		return nil, err
 	}
