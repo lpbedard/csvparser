@@ -54,6 +54,9 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 
 		if parser.SkipFirstLine {
 			parser.SkipFirstLine = false
+			defer func() {
+				parser.SkipFirstLine = true
+			}()
 			continue
 		}
 
