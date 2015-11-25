@@ -66,7 +66,7 @@ var csvParser = parser.CsvParser{
 
 var parsedItems, err = csvParser.Parse(YourStruct{})
 
-for i:=0;i<len(parsedItems);i++{
+for i:=0; i<len(parsedItems); i++{
   log.Print(parsedItems[i].(*YourStruct))
 }
 ```
