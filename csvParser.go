@@ -48,7 +48,7 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 			if fmt.Sprint(err) == "EOF" {
 				break
 			} else {
-				return nil, fmt.Errorf("error: %v", err)
+				return nil, err
 			}
 		}
 
@@ -60,7 +60,7 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 			continue
 		}
 
-		var newItem = reflect.New(resultType).Interface()
+		var newResult = reflect.New(resultType).Interface()
 
 		// set all the struct fields
 		for fieldIndex := 0; fieldIndex < resultType.NumField(); fieldIndex++ {
@@ -86,7 +86,7 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 			}
 
 			var csvElement = rawCSVLine[csvColumnIndex]
-			var settableField = reflect.ValueOf(newItem).Elem().FieldByName(currentField.Name)
+			var settableField = reflect.ValueOf(newResult).Elem().FieldByName(currentField.Name)
 
 			if csvElement == "" && parser.SkipEmptyValues {
 				continue
@@ -141,7 +141,7 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 			}
 		}
 
-		results = append(results, newItem)
+		results = append(results, newResult)
 	}
 	return results, err
 }
