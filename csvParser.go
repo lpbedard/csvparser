@@ -38,6 +38,10 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 
 	resultType := reflect.ValueOf(f).Type()
 
+	if parser.SkipFirstLine {
+		csvReader.Read()
+	}
+
 	for {
 
 		rawCSVLine, err := csvReader.Read()
@@ -47,11 +51,6 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 			} else {
 				return nil, err
 			}
-		}
-
-		if parser.SkipFirstLine {
-			parser.SkipFirstLine = false
-			continue
 		}
 
 		var newResult = reflect.New(resultType).Interface()
