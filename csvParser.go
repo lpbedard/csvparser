@@ -33,9 +33,6 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 
 	var csvReader = csv.NewReader(csvFile)
 	csvReader.Comma = parser.CsvSeparator
-	if err != nil {
-		return nil, err
-	}
 
 	var results = make([]interface{}, 0, 0)
 
@@ -54,9 +51,6 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 
 		if parser.SkipFirstLine {
 			parser.SkipFirstLine = false
-			defer func() {
-				parser.SkipFirstLine = true
-			}()
 			continue
 		}
 
