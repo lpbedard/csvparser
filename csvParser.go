@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -126,11 +127,21 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 				settableField.SetString(csvElement)
 
 			case "Time":
-				var date, err = time.Parse(currentField.Tag.Get("csvDate"), csvElement)
+				var date time.Time
+				var err error
+				csvDateFormats := strings.Split(currentField.Tag.Get("csvDate"), ",")
+
+				// loop on formats
+				for _, csvDate := range csvDateFormats {
+					date, err = time.Parse(csvDate, csvElement)
+					if err == nil {
+						settableField.Set(reflect.ValueOf(date))
+						break
+					}
+				}
 				if err != nil {
 					return nil, err
 				}
-				settableField.Set(reflect.ValueOf(date))
 			}
 		}
 
