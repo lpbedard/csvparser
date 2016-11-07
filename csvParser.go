@@ -61,6 +61,11 @@ func (parser CsvParser) Parse(f interface{}) ([]interface{}, error) {
 			var currentField = resultType.Field(fieldIndex)
 
 			var csvTag = currentField.Tag.Get("csv")
+
+			if csvTag == "-" {
+				continue
+			}
+
 			var csvColumnIndex, csvTagErr = strconv.Atoi(csvTag)
 
 			if csvTagErr != nil {
